@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">D</div>
+      <div class="brand-copy">
+        <h1>Decide</h1>
+        <p>Make the call with better evidence.</p>
+      </div>
+      <button id="settingsToggle" class="icon-button" title="Settings" aria-label="Settings">⚙</button>
+    </header>
+
+    <section id="settingsPanel" class="settings-panel hidden">
+      <div class="settings-heading">
+        <div>
+          <h2>Backup providers</h2>
+          <p>Ollama stays first. These are only used if Ollama is unavailable.</p>
+        </div>
+        <button id="settingsClose" class="text-button" type="button">Close</button>
+      </div>
+      <label>Gemini API key <input id="geminiKey" type="password" autocomplete="off" placeholder="Optional"></label>
+      <label>Groq API key <input id="groqKey" type="password" autocomplete="off" placeholder="Optional"></label>
+      <label>OpenRouter API key <input id="openRouterKey" type="password" autocomplete="off" placeholder="Optional"></label>
+      <details class="model-settings">
+        <summary>Model settings</summary>
+        <label>Ollama model <input id="ollamaModel" type="text" value="gpt-oss:120b-cloud"></label>
+        <label>Gemini model <input id="geminiModel" type="text" value="gemini-3.8-flash"></label>
+        <label>Groq model <input id="groqModel" type="text" value="openai/gpt-oss-120b"></label>
+        <label>OpenRouter model <input id="openRouterModel" type="text" value="openai/gpt-oss-120b"></label>
+      </details>
+      <p class="settings-note">Keys are stored in this Chrome profile only. They are not included in the download. When a backup provider is used, the information needed for the decision is sent to that provider.</p>
+      <button id="saveSettings" class="secondary-button" type="button">Save settings</button>
+      <p id="settingsStatus" class="small-status" aria-live="polite"></p>
+    </section>
+
+    <section class="goal-section">
+      <label class="section-label" for="goalInput">What decision do you need to make?</label>
+      <textarea id="goalInput" rows="3" maxlength="1000" placeholder="For example, I need a reliable phone under ₹20,000 with a good camera and long software support."></textarea>
+      <div class="goal-hint">Say what matters to you. Include limits, must haves, or things you would prefer.</div>
+    </section>
+
+    <section class="pages-section">
+      <div class="section-heading">
+        <div>
+          <h2>Pages for this decision</h2>
+          <p>Choose the tabs that contain your options.</p>
+        </div>
+        <button id="refreshTabs" class="text-button" type="button">Refresh</button>
+      </div>
+      <div id="tabList" class="tab-list"><div class="empty-state">Looking for open pages…</div></div>
+      <div class="selection-footer">
+        <span id="selectedCount">0 selected</span>
+        <span>Choose 2 to 8 pages</span>
+      </div>
+    </section>
+
+    <button id="makeDecision" class="primary-button" type="button">Make my decision <span aria-hidden="true">→</span></button>
+    <button id="cancelRun" class="cancel-button hidden" type="button">Cancel this decision</button>
+    <p class="privacy-line">Decide reads only the tabs you choose. Page content is sent to the AI provider used for this decision.</p>
+
+    <section id="progressPanel" class="progress-panel hidden" aria-live="polite">
+      <div class="progress-spinner"></div>
+      <div><strong id="progressTitle">Working on your decision</strong><p id="progressText">Getting the selected pages ready.</p></div>
+    </section>
+
+    <section id="resultPanel" class="result-panel hidden" aria-live="polite"></section>
+    <section id="errorPanel" class="error-panel hidden" aria-live="polite"></section>
+    <footer><span>Decide</span><span>Make a decision, not more noise.</span></footer>
+  </main>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
