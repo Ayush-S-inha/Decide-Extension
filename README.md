@@ -1,75 +1,57 @@
 # Decide
 
-**Make a decision, not more noise.**
-
-Decide helps you make a decision using evidence from the pages you choose. Tell it what matters to you, select the pages that contain your options, and let it work through the available information. It gives you a recommendation when the evidence supports one. It also points out trade offs and missing information, so you can see where the answer is uncertain.
+Decide is a Chrome side panel for comparing options across the pages you already have open. Write down the decision, select the tabs with useful information, and Decide extracts facts before asking an AI provider to compare them. Each option keeps a link to its source page, and the result calls out trade-offs and important gaps instead of filling them with guesses.
 
 ## What you need
 
-For the default setup, you only need Google Chrome and Ollama installed and signed in. You do not need Node.js, npm, a separate server, or a Decide account.
+- Google Chrome 116 or newer.
+- Ollama installed, running, and signed in.
+- An internet connection for the default `gpt-oss:120b-cloud` model, which runs through Ollama Cloud.
 
-Decide tries Ollama first and uses `gpt-oss:120b-cloud` by default. Ollama needs to be running. If the model is not ready, Decide tries to prepare it the first time you use it.
+You do not need Node.js, npm, a separate Decide server, or a Decide account to use the extension.
 
-One thing to know: `gpt-oss:120b-cloud` runs in Ollama's cloud. Even though Decide connects to Ollama on your own computer, the page information needed for your decision is processed by Ollama's cloud model.
+## Install from a release ZIP
 
-## Install Decide
-
-1. Download `Decide-Extension-Only.zip` from the latest release and extract it.
-2. Open Chrome and enter `chrome://extensions` in the address bar.
+1. Download the extension-only ZIP from the release and extract it.
+2. Open `chrome://extensions` in Chrome.
 3. Turn on **Developer mode**.
-4. Click **Load unpacked**.
-5. Select the extracted folder containing `manifest.json`.
-6. Leave Ollama running, open the pages you need, and click the Decide icon in Chrome.
+4. Click **Load unpacked** and select the extracted folder containing `manifest.json`.
+5. Open the pages you want to compare and click the Decide icon.
 
-Chrome needs the extracted folder for **Load unpacked**. It cannot load the ZIP directly. You only need to do this installation once, unless you remove the extension or replace the folder.
+Chrome's **Load unpacked** option takes a folder, not the ZIP file itself.
 
-## Make a decision
+## Run a comparison
 
-1. Open the pages that contain the options you are considering.
+1. Open the pages that describe your options.
 2. Open Decide from the Chrome toolbar.
-3. Write the decision you need to make in the goal box. Be specific about what matters to you.
-4. Select between two and eight pages.
+3. Enter the decision and the constraints that matter to you.
+4. Select between two and five pages.
 5. Click **Make my decision**.
 
-Decide reads the pages you selected and looks for facts that matter to your goal. The recommendation should be based on the evidence it finds. If important information is missing, it should tell you rather than treating an unknown as a fact.
+Decide captures information from the selected tabs, extracts relevant facts, and sends those facts to the configured model for comparison. The result includes source links, supporting facts, trade-offs, and missing information where available. Retailer pages change frequently, and a page may hide or delay details, so check prices and selected variants on the source page before buying.
 
-Some websites block access to their content or require you to sign in. Decide may not be able to read those pages. Open the page normally first and make sure the relevant details are visible.
+## AI providers
 
-## Optional backup providers
+Ollama is tried first. The default model is `gpt-oss:120b-cloud`; it is a cloud model, so using it does not keep the page content on your computer.
 
-You do not need another API key to use Decide with Ollama.
+Gemini, Groq, and OpenRouter are optional fallbacks. Add your own API key in **Settings** to enable one. Providers without a key are skipped, and the configured providers are tried in this order: Ollama, Gemini, Groq, then OpenRouter. When a fallback handles a decision, the information needed for that request is sent to that provider. Check the provider's terms before using it.
 
-If Ollama is unavailable or you want backup providers, open **Settings** inside Decide and add your own API key. The providers are tried in this order:
+## Privacy and data handling
 
-1. Ollama
-2. Gemini
-3. Groq
-4. OpenRouter
+Decide does not run a hosted backend of its own and does not send usage analytics to a Decide server. It reads the tabs you select when you start a decision. Page titles, URLs, relevant text, headings, structured data, and extracted facts may be included in the request sent to the AI provider. URL query parameters can contain private information, so avoid selecting pages whose URLs or contents you do not want processed by that provider.
 
-Providers without a key are skipped. The keys you add are saved in your local Chrome profile and are not included in this download. When a backup provider is used, the information needed for your decision is sent to that provider. Check the provider's terms before adding a key.
+Provider settings, API keys, and the saved decision are stored in Chrome's local extension storage. They are not included in the source or release ZIP. See [PRIVACY.md](PRIVACY.md) for the data-handling summary.
 
-## Privacy
+## Troubleshooting
 
-This version does not use a Decide hosted backend and does not send usage analytics to a Decide server. Your provider settings and the last decision are saved in Chrome's local extension storage.
+**Ollama is unavailable.** Open Ollama and check that it is running and signed in.
 
-Decide reads the pages you select when you start a decision. Page content and extracted facts are sent to the AI provider that handles the request. The default model uses Ollama Cloud. If you add backup providers, relevant information may be sent to one of them when it is used. Do not send information you would not want processed by the selected provider.
+**The model is missing.** Decide asks Ollama to prepare the configured model. You can also run `ollama run gpt-oss:120b-cloud` in a terminal and retry.
 
-The extension needs permission to read the tabs you select so it can use their visible information. It does not need you to provide a Decide account.
+**A page could not be read.** Make sure it is a normal `http` or `https` tab and that the relevant information has loaded. Some sites restrict access or render details in a way the extension cannot capture.
 
-## If something does not work
-
-**Ollama is not reachable.** Open Ollama and check that it is running and signed in.
-
-**The model is not available.** Decide tries to prepare the configured model when Ollama says it is missing. You can also run `ollama run gpt-oss:120b-cloud` in a terminal, then try again.
-
-**A page could not be read.** Check that it is a normal website page, that it has finished loading, and that the information you need is visible.
-
-**A backup provider did not run.** Check its API key and model name in Settings. If you only use Ollama, leave the backup fields empty.
-
-## A final note
-
-Decide is meant to help you think through a decision, not make you stop thinking. Pages can be incomplete or out of date, and AI can make mistakes. Check important claims at their original source before spending money or making a decision with serious consequences.
+**A fallback provider did not run.** Check its API key and model name in **Settings**. If you only use Ollama, leave the fallback keys empty.
 
 ## License
 
-Decide is released under the MIT License. See `LICENSE` for the full terms.
+Decide is released under the MIT License. See [LICENSE](LICENSE).

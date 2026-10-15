@@ -101,6 +101,14 @@ function getSelectedTabIds() {
 function updateCount() {
   const count = getSelectedTabIds().length;
   ui.selectedCount.textContent = `${count} selected`;
+
+  // Describe the tabs visible in this window rather than implying eight are open.
+  // Chrome tabs in another window are not included because loadTabs uses currentWindow.
+  const limitNote = ui.tabList.parentElement?.querySelector(".selection-footer span:last-child");
+  if (limitNote) {
+    const maximum = Math.min(8, visibleTabs.length);
+    limitNote.textContent = maximum >= 2 ? `Choose 2 to ${maximum} pages` : "Open at least 2 pages";
+  }
 }
 
 function showError(message, title = "Something needs your attention") {
@@ -195,7 +203,19 @@ function appendList(parent, titleText, values) {
 function factDisplay(fact) {
   const value = String(fact?.value || "").trim();
   const unit = String(fact?.unit || "").trim();
-  if (!unit || !value) return value;
+  if (!value) return value;
+  const isCurrentPrice = /^(?:current listed price|discounted price|sale price|offer price|price \(discounted\))$/i.test(String(fact?.attribute || "").trim());
+  const priceContext = `${value} ${unit} ${String(fact?.evidence || "")}`;
+  if (isCurrentPrice && /(?:₹|\bINR\b|\bRs\.?\b)/i.test(priceContext)) {
+    const amountText = value.replace(/^\s*(?:₹|Rs\.?|INR)\s*/i, "").replace(/\s*(?:₹|Rs\.?|INR)\s*$/i, "").trim();
+    if (/^\d[\d,]*(?:\.\d{1,2})?$/.test(amountText)) {
+      const amount = Number(amountText.replace(/,/g, ""));
+      if (Number.isFinite(amount) && amount > 0) {
+        return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(amount);
+      }
+    }
+  }
+  if (!unit) return value;
   const normalizedValue = value.toLowerCase().replace(/\s+/g, "");
   const normalizedUnit = unit.toLowerCase().replace(/\s+/g, "");
   if (normalizedValue.includes(normalizedUnit)) return value;

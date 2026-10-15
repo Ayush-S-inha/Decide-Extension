@@ -1,0 +1,18 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+
+# Runtime output
+*.log
+logs/
+
+# Local tooling and OS files
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Downloadable builds; publish these as release assets, not source files
+*.zip
+*.crx

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Decide",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Turn information in your open tabs into a grounded decision.",
   "permissions": [
     "tabs",

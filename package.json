@@ -1,0 +1,12 @@
+{
+  "name": "decide-extension",
+  "version": "1.0.3",
+  "private": true,
+  "description": "Local regression tests for the Decide Chrome extension",
+  "scripts": {
+    "test": "node tests/worker-price-presentation.test.cjs && node tests/worker-quality.test.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
