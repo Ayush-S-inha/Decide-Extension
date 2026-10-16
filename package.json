@@ -4,7 +4,7 @@
   "private": true,
   "description": "Local regression tests for the Decide Chrome extension",
   "scripts": {
-    "test": "node tests/worker-price-presentation.test.cjs && node tests/worker-quality.test.cjs"
+    "test": "node worker-price-presentation.test.cjs && node worker-quality.test.cjs"
   },
   "engines": {
     "node": ">=18"

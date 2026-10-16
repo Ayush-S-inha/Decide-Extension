@@ -1,7 +1,7 @@
 const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
-const workerPath = process.env.WORKER_SOURCE || path.join(__dirname, '..', 'worker.js');
+const workerPath = process.env.WORKER_SOURCE || (fs.existsSync(path.join(__dirname, 'worker.js')) ? path.join(__dirname, 'worker.js') : path.join(__dirname, '..', 'worker.js'));
 const source = fs.readFileSync(workerPath, 'utf8');
 const start = source.indexOf('function limitText(');
 const end = source.indexOf('async function processDecision(', start);
